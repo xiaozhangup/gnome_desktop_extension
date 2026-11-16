@@ -12,7 +12,8 @@ indicator and a settings app to customize every aspect.
 - **Repository:** <https://github.com/euschi/gnome_desktop_extension>
 
 The user interface is in English and follows the system language when a
-translation is available (currently: Italian). See [Translations](#translations).
+translation is available (currently: Italian and Simplified Chinese).
+See [Translations](#translations).
 
 ---
 
@@ -447,7 +448,8 @@ binds the same domain to `extension/locale/` in `app/i18n.js`.
 po/
 ├── LINGUAS          # list of available languages
 ├── deskicons.pot    # template, generated from the sources
-└── it.po            # Italian
+├── it.po            # Italian
+└── zh_CN.po         # Simplified Chinese
 ```
 
 **Adding a language** (e.g. German):

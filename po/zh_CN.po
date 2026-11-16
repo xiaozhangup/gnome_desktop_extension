@@ -1,0 +1,590 @@
+# Simplified Chinese translation for Icone Desktop (deskicons@euschi.github.io).
+# Copyright (C) 2026 xiaozhangup
+# This file is distributed under the same license as the deskicons package.
+# xiaozhangup <xiaozhangshiw@163.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: deskicons\n"
+"Report-Msgid-Bugs-To: https://github.com/euschi/gnome_desktop_extension/issues\n"
+"POT-Creation-Date: 2026-10-09 10:00+0200\n"
+"PO-Revision-Date: 2026-11-16 17:08+0800\n"
+"Last-Translator: xiaozhangup <xiaozhangshiw@163.com>\n"
+"Language-Team: Chinese (simplified)\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: extension/prefs.js:18
+msgid "Shadow"
+msgstr "阴影"
+
+#: extension/prefs.js:18
+msgid "Dark Background"
+msgstr "深色背景"
+
+#: extension/prefs.js:19
+msgid "None"
+msgstr "无"
+
+#: extension/prefs.js:20
+msgid "Top Left"
+msgstr "左上角"
+
+#: extension/prefs.js:20
+msgid "Top Right"
+msgstr "右上角"
+
+#: extension/prefs.js:21
+msgid "Bottom Left"
+msgstr "左下角"
+
+#: extension/prefs.js:21
+msgid "Bottom Right"
+msgstr "右下角"
+
+#: extension/prefs.js:22
+msgid "Columns First (vertical)"
+msgstr "按列排列（纵向）"
+
+#: extension/prefs.js:23
+msgid "Rows First (horizontal)"
+msgstr "按行排列（横向）"
+
+#: extension/prefs.js:24 extension/lib/indicator.js:68
+#: extension/app/menus.js:70
+msgid "Name"
+msgstr "名称"
+
+#: extension/prefs.js:24 extension/lib/indicator.js:69
+#: extension/app/menus.js:70
+msgid "Modification Date"
+msgstr "修改时间"
+
+#: extension/prefs.js:25 extension/lib/indicator.js:70
+#: extension/app/menus.js:71
+msgid "Type"
+msgstr "类型"
+
+#: extension/prefs.js:25 extension/lib/indicator.js:71
+#: extension/app/menus.js:71
+msgid "Size"
+msgstr "大小"
+
+#: extension/prefs.js:26
+msgid "All Monitors"
+msgstr "所有显示器"
+
+#: extension/prefs.js:26
+msgid "Primary Monitor Only"
+msgstr "仅主显示器"
+
+#: extension/prefs.js:27
+msgid "Double Click"
+msgstr "双击"
+
+#: extension/prefs.js:27
+msgid "Single Click"
+msgstr "单击"
+
+#: extension/prefs.js:28
+msgid "Ask for Confirmation"
+msgstr "启动前询问"
+
+#: extension/prefs.js:28
+msgid "Always Launch"
+msgstr "总是启动"
+
+#: extension/prefs.js:78
+msgid "Appearance"
+msgstr "外观"
+
+#: extension/prefs.js:79
+msgid "Icons"
+msgstr "图标"
+
+#: extension/prefs.js:80
+msgid "Icon Size"
+msgstr "图标大小"
+
+#: extension/prefs.js:80
+msgid "In pixels"
+msgstr "单位为像素"
+
+#: extension/prefs.js:81
+msgid "Spacing"
+msgstr "间距"
+
+#: extension/prefs.js:81
+msgid "Space between icons in pixels"
+msgstr "图标之间的间距，单位为像素"
+
+#: extension/prefs.js:82
+msgid "Show Thumbnails"
+msgstr "显示缩略图"
+
+#: extension/prefs.js:82
+msgid "Previews of images, videos and documents"
+msgstr "显示图片、视频和文档的预览"
+
+#: extension/prefs.js:84
+msgid "Labels"
+msgstr "图标文字"
+
+#: extension/prefs.js:85
+msgid "Maximum Lines"
+msgstr "最多显示行数"
+
+#: extension/prefs.js:86
+msgid "Style"
+msgstr "样式"
+
+#: extension/prefs.js:90
+msgid "Layout"
+msgstr "布局"
+
+#: extension/prefs.js:91
+msgid "New Icons"
+msgstr "新图标"
+
+#: extension/prefs.js:92
+msgid "Start Corner"
+msgstr "排列起点"
+
+#: extension/prefs.js:93
+msgid "Where new icons appear"
+msgstr "新图标开始排列的位置"
+
+#: extension/prefs.js:94
+msgid "Fill Direction"
+msgstr "排列方向"
+
+#: extension/prefs.js:95
+msgid "Monitors"
+msgstr "显示器"
+
+#: extension/prefs.js:97
+msgid "Grid"
+msgstr "网格"
+
+#: extension/prefs.js:98 extension/app/menus.js:81
+msgid "Align to Grid"
+msgstr "对齐到网格"
+
+#: extension/prefs.js:99
+msgid "When off, icons stay exactly where you drop them"
+msgstr "关闭后，图标将保留在拖放位置"
+
+#: extension/prefs.js:100 extension/lib/indicator.js:48
+#: extension/app/menus.js:80
+msgid "Keep Arranged"
+msgstr "自动排列"
+
+#: extension/prefs.js:101
+msgid "Icons are always laid out according to the sort order"
+msgstr "始终按所选排序方式排列图标"
+
+#: extension/prefs.js:102 extension/lib/indicator.js:65
+#: extension/app/menus.js:83
+msgid "Sort By"
+msgstr "排序方式"
+
+#: extension/prefs.js:103 extension/app/menus.js:74
+msgid "Reverse Order"
+msgstr "逆序排列"
+
+#: extension/prefs.js:104
+msgid "Folders Before Files"
+msgstr "文件夹优先"
+
+#: extension/prefs.js:106
+msgid "Margins"
+msgstr "边距"
+
+#: extension/prefs.js:107
+msgid "Top"
+msgstr "上"
+
+#: extension/prefs.js:108
+msgid "Bottom"
+msgstr "下"
+
+#: extension/prefs.js:109
+msgid "Left"
+msgstr "左"
+
+#: extension/prefs.js:110
+msgid "Right"
+msgstr "右"
+
+#: extension/prefs.js:111
+msgid "Free space at the screen edges, in pixels"
+msgstr "屏幕边缘的留白，单位为像素"
+
+#: extension/prefs.js:114
+msgid "Terminal (empty = automatic)"
+msgstr "终端（留空时自动选择）"
+
+#: extension/prefs.js:117
+msgid "Reset to Defaults"
+msgstr "恢复默认设置"
+
+#: extension/prefs.js:124
+msgid "Behavior"
+msgstr "行为"
+
+#: extension/prefs.js:125
+msgid "Opening"
+msgstr "打开操作"
+
+#: extension/prefs.js:126
+msgid "Open Items With"
+msgstr "打开项目的方式"
+
+#: extension/prefs.js:127
+msgid "Untrusted .desktop Launchers"
+msgstr "未受信任的 .desktop 启动器"
+
+#: extension/prefs.js:130
+msgid "Safety"
+msgstr "操作确认"
+
+#: extension/prefs.js:131
+msgid "Confirm Before Moving to Trash"
+msgstr "移至回收站前询问"
+
+#: extension/prefs.js:133
+msgid "Panel"
+msgstr "顶栏"
+
+#: extension/prefs.js:134
+msgid "Show Panel Indicator"
+msgstr "显示顶栏图标"
+
+#: extension/prefs.js:135
+msgid "Show Icons on the Desktop"
+msgstr "显示桌面图标"
+
+#: extension/prefs.js:140
+msgid "Items"
+msgstr "显示项目"
+
+#: extension/prefs.js:141
+msgid "Special Items"
+msgstr "系统图标"
+
+#: extension/prefs.js:142
+msgid "Home Folder"
+msgstr "主文件夹"
+
+#: extension/prefs.js:143 extension/app/desktopModel.js:230
+msgid "Trash"
+msgstr "回收站"
+
+#: extension/prefs.js:144
+msgid "Mounted Drives"
+msgstr "已挂载的驱动器"
+
+#: extension/prefs.js:144
+msgid "Disks and USB sticks"
+msgstr "磁盘和 U 盘"
+
+#: extension/prefs.js:145
+msgid "Network Drives"
+msgstr "网络驱动器"
+
+#: extension/prefs.js:147
+msgid "Files"
+msgstr "文件"
+
+#: extension/prefs.js:148 extension/app/menus.js:82
+msgid "Show Hidden Files"
+msgstr "显示隐藏文件"
+
+#: extension/lib/indicator.js:23
+msgid "Desktop Icons"
+msgstr "桌面图标"
+
+#: extension/lib/indicator.js:42 extension/app/menus.js:92
+msgid "Show Icons"
+msgstr "显示图标"
+
+#: extension/lib/indicator.js:63 extension/app/menus.js:79
+msgid "Arrange Icons"
+msgstr "排列图标"
+
+#: extension/lib/indicator.js:95 extension/app/desktopController.js:878
+#: extension/app/menus.js:58
+msgid "New Folder"
+msgstr "新建文件夹"
+
+#: extension/lib/indicator.js:99 extension/app/menus.js:88
+msgid "Open Desktop in Files"
+msgstr "在文件管理器中打开桌面"
+
+#: extension/lib/indicator.js:100
+msgid "Reload"
+msgstr "重新加载"
+
+#: extension/lib/indicator.js:101
+msgid "Settings…"
+msgstr "设置…"
+
+#: extension/app/desktopController.js:774
+msgid "Untrusted Launcher"
+msgstr "未受信任的启动器"
+
+#. Translators: %s is the name of the launcher
+#: extension/app/desktopController.js:776
+#, javascript-format
+msgid ""
+"“%s” is not marked as trusted. Only launch it if you know where it comes "
+"from."
+msgstr "“%s”尚未标记为受信任。请确认其来源后再启动。"
+
+#: extension/app/desktopController.js:778
+msgid "Allow and Launch"
+msgstr "允许并启动"
+
+#: extension/app/desktopController.js:843
+msgid "Move to Trash?"
+msgstr "移至回收站？"
+
+#. Translators: %d is the number of selected items
+#: extension/app/desktopController.js:845
+#, javascript-format
+msgid "The selected item will be moved to the trash."
+msgid_plural "%d items will be moved to the trash."
+msgstr[0] "将把选中的 %d 个项目移至回收站。"
+
+#: extension/app/desktopController.js:848 extension/app/menus.js:143
+msgid "Move to Trash"
+msgstr "移至回收站"
+
+#: extension/app/desktopController.js:866
+msgid "Unable to Eject"
+msgstr "无法弹出"
+
+#: extension/app/desktopController.js:866
+msgid "Unable to Unmount"
+msgstr "无法卸载"
+
+#: extension/app/desktopController.js:899
+msgid "Cancel"
+msgstr "取消"
+
+#: extension/app/desktopController.js:904
+msgid "OK"
+msgstr "确定"
+
+#: extension/app/desktopModel.js:218
+msgid "Home"
+msgstr "主文件夹"
+
+#: extension/app/menus.js:61
+msgid "New Document"
+msgstr "新建文档"
+
+#: extension/app/menus.js:65
+msgid "Paste"
+msgstr "粘贴"
+
+#: extension/app/menus.js:66
+msgid "Undo"
+msgstr "撤销"
+
+#: extension/app/menus.js:67
+msgid "Redo"
+msgstr "重做"
+
+#: extension/app/menus.js:75
+msgid "Folders First"
+msgstr "文件夹优先"
+
+#: extension/app/menus.js:78
+msgid "Select All"
+msgstr "全选"
+
+#: extension/app/menus.js:87 extension/app/menus.js:112
+#: extension/app/menus.js:120 extension/app/menus.js:147
+msgid "Open in Terminal"
+msgstr "在终端中打开"
+
+#: extension/app/menus.js:91
+msgid "Change Background…"
+msgstr "更换背景…"
+
+#: extension/app/menus.js:93
+msgid "Icon Settings…"
+msgstr "图标设置…"
+
+#: extension/app/menus.js:106 extension/app/menus.js:111
+#: extension/app/menus.js:119 extension/app/menus.js:126
+msgid "Open"
+msgstr "打开"
+
+#: extension/app/menus.js:107
+msgid "Empty Trash"
+msgstr "清空回收站"
+
+#: extension/app/menus.js:114
+msgid "Eject"
+msgstr "弹出"
+
+#: extension/app/menus.js:115
+msgid "Unmount"
+msgstr "卸载"
+
+#: extension/app/menus.js:121 extension/app/menus.js:148
+msgid "Properties"
+msgstr "属性"
+
+#: extension/app/menus.js:126
+msgid "Run"
+msgstr "运行"
+
+#: extension/app/menus.js:127
+msgid "Allow Launching"
+msgstr "允许启动"
+
+#: extension/app/menus.js:132
+msgid "Open With"
+msgstr "打开方式"
+
+#: extension/app/menus.js:138
+msgid "Cut"
+msgstr "剪切"
+
+#: extension/app/menus.js:139
+msgid "Copy"
+msgstr "复制"
+
+#: extension/app/menus.js:140
+msgid "Copy Path"
+msgstr "复制路径"
+
+#: extension/app/menus.js:142
+msgid "Rename…"
+msgstr "重命名…"
+
+#: extension/app/menus.js:144
+msgid "Delete Permanently"
+msgstr "永久删除"
+
+#: extension/app/menus.js:146
+msgid "Show in Files"
+msgstr "在文件管理器中显示"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:9
+msgid "Icon size (px)"
+msgstr "图标大小（像素）"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:14
+msgid "Maximum label lines"
+msgstr "图标文字的最大行数"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:23
+msgid "Label style"
+msgstr "图标文字样式"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:28
+msgid "Spacing between icons (px)"
+msgstr "图标间距（像素）"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:32
+msgid "Show file thumbnails"
+msgstr "显示文件缩略图"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:44
+msgid "Corner from which new icons are placed"
+msgstr "新图标的排列起点"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:52
+msgid "Fill direction (columns or rows first)"
+msgstr "排列方向（按列或按行）"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:57
+msgid "Top margin"
+msgstr "上边距"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:62
+msgid "Bottom margin"
+msgstr "下边距"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:67
+msgid "Left margin"
+msgstr "左边距"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:72
+msgid "Right margin"
+msgstr "右边距"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:76
+msgid "Align icons to the grid"
+msgstr "将图标对齐到网格"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:80
+msgid "Keep icons arranged"
+msgstr "自动排列图标"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:90
+msgid "Sort criterion"
+msgstr "排序依据"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:94
+msgid "Reverse order"
+msgstr "逆序排列"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:98
+msgid "Folders before files"
+msgstr "文件夹优先"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:106
+msgid "Monitors on which to show icons"
+msgstr "显示图标的显示器"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:112
+msgid "Icons visible"
+msgstr "显示图标"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:120
+msgid "Click to open"
+msgstr "打开项目的点击方式"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:128
+msgid "Launching untrusted .desktop launchers"
+msgstr "未受信任的 .desktop 启动器的启动方式"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:132
+msgid "Ask for confirmation before moving to trash"
+msgstr "移至回收站前询问"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:136
+msgid "Terminal command (empty = automatic)"
+msgstr "终端命令（留空时自动选择）"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:140
+msgid "Show panel indicator"
+msgstr "显示顶栏图标"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:146
+msgid "Show the Home folder"
+msgstr "显示主文件夹"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:150
+msgid "Show the Trash"
+msgstr "显示回收站"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:154
+msgid "Show mounted drives"
+msgstr "显示已挂载的驱动器"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:158
+msgid "Show network drives"
+msgstr "显示网络驱动器"
+
+#: extension/schemas/org.gnome.shell.extensions.deskicons.gschema.xml:162
+msgid "Show hidden files"
+msgstr "显示隐藏文件"
