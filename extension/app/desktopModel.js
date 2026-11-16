@@ -48,6 +48,13 @@ export class DesktopItem {
         return this.kind === 'file' && this.appInfo !== null;
     }
 
+    get isExecutable() {
+        return this.kind === 'file' && !this.isDir && !this.isLauncher &&
+            !!this.path &&
+            this.info.get_attribute_boolean('access::can-execute') &&
+            Gio.content_type_can_be_executable(this.contentType);
+    }
+
     get isTrusted() {
         if (!this.isLauncher)
             return true;

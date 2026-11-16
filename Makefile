@@ -17,7 +17,7 @@ all: schemas locale
 schemas:
 	glib-compile-schemas --strict $(SRC)/schemas
 
-# Traduzioni compilate in extension/locale/ (per l'installazione con symlink;
+# Traduzioni compilate in extension/locale/ (per l'installazione;
 # lo zip le compila da sé con --podir)
 locale: $(MO_FILES)
 
@@ -34,17 +34,18 @@ pot:
 		$(patsubst $(CURDIR)/%,%,$(SCHEMA))
 	for po in $(PO_FILES); do msgmerge --update --backup=none $$po po/$(DOMAIN).pot; done
 
-# Installazione di sviluppo: symlink della cartella extension/
+# Installa una copia della cartella extension/
 install: schemas locale
-	mkdir -p $(dir $(EXT_DIR))
-	ln -sfn $(SRC) $(EXT_DIR)
-	install -Dm644 launcher/$(LAUNCHER) $(APPS_DIR)/$(LAUNCHER)
+	mkdir -p "$(dir $(EXT_DIR))"
+	rm -rf "$(EXT_DIR)"
+	cp -a "$(SRC)" "$(EXT_DIR)"
+	install -Dm644 "launcher/$(LAUNCHER)" "$(APPS_DIR)/$(LAUNCHER)"
 	@echo "Installata. Su Wayland: logout/login, poi: gnome-extensions enable $(UUID)"
 
 uninstall:
 	-gnome-extensions disable $(UUID)
-	rm -f $(EXT_DIR)
-	rm -f $(APPS_DIR)/$(LAUNCHER)
+	rm -rf "$(EXT_DIR)"
+	rm -f "$(APPS_DIR)/$(LAUNCHER)"
 
 zip: schemas
 	mkdir -p dist

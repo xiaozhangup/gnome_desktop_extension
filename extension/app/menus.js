@@ -123,7 +123,7 @@ export function itemMenu(ctx) {
     }
 
     const open = section(
-        item(single?.isLauncher ? _('Run') : _('Open'), 'open'),
+        item(single?.isLauncher || single?.isExecutable ? _('Run') : _('Open'), 'open'),
         single?.isLauncher && !single.isTrusted ? item(_('Allow Launching'), 'allow-launch') : null);
     if (ctx.appsForType.length) {
         const apps = new Gio.Menu();

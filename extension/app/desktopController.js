@@ -225,8 +225,15 @@ export class DesktopController {
     _grids() {
         return this.windows.map(win => ({
             monitor: win.monitor.index,
-            geometry: new GridGeometry(win.gridWidth, win.gridHeight, this.settings),
+            geometry: new GridGeometry(win.gridWidth, win.gridHeight, this.settings, win.monitor.insets),
         }));
+    }
+
+    updateMonitors(monitors) {
+        this._monitors = monitors;
+        for (const m of monitors)
+            this._windowFor(m.index)?.updateMonitor(m);
+        this.relayout();
     }
 
     _windowFor(monitorIndex) {
@@ -525,6 +532,7 @@ export class DesktopController {
     }
 
     onDragEnd() {
+        this._clearDropPlaceholders();
         // The drop (if internal) has already been handled
         GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
             this._drag = null;
@@ -604,6 +612,7 @@ export class DesktopController {
         const files = this._dropFiles(drop);
         const target = this._dropTargetAt(win, drop, x, y);
         this._setDropHighlight(target);
+        this._updateDropPlaceholders(win, drop, x, y, target);
         let action;
         if (target?.item.kind === 'trash')
             action = this._pickAction(drop, Gdk.DragAction.MOVE);
@@ -621,10 +630,12 @@ export class DesktopController {
 
     onDropLeave() {
         this._setDropHighlight(null);
+        this._clearDropPlaceholders();
     }
 
     async onDrop(win, drop, x, y) {
         this._setDropHighlight(null);
+        this._clearDropPlaceholders();
         let action = drop.get_actions();
         if (!Gdk.drag_action_is_unique(action))
             action = this._lastDropAction ?? Gdk.DragAction.COPY;
@@ -679,16 +690,55 @@ export class DesktopController {
         return true;
     }
 
-    _moveDragged(win, x, y) {
+    _clearDropPlaceholders() {
+        for (const w of this.windows)
+            w.setDropPlaceholders([]);
+    }
+
+    _updateDropPlaceholders(win, drop, x, y, target) {
+        if (target || this.settings.get_boolean('keep-arranged')) {
+            this._clearDropPlaceholders();
+            return;
+        }
+        for (const w of this.windows) {
+            if (w !== win)
+                w.setDropPlaceholders([]);
+        }
+        const geometry = new GridGeometry(win.gridWidth, win.gridHeight, this.settings, win.monitor.insets);
+        const snap = this.settings.get_boolean('snap-to-grid');
+        const toRect = (c, r) => {
+            [c, r] = geometry.clamp(c, r);
+            if (snap) {
+                c = Math.min(geometry.cols - 1, Math.round(c));
+                r = Math.min(geometry.rows - 1, Math.round(r));
+            }
+            const [px, py] = geometry.cellToPixel(c, r);
+            return {x: px, y: py, width: geometry.itemWidth, height: geometry.itemHeight};
+        };
+
+        const rects = [];
+        if (this._isInternal(drop)) {
+            for (const [, c, r] of this._draggedCells(x, y, geometry))
+                rects.push(toRect(c, r));
+        } else {
+            const count = this._dropFiles(drop)?.length || 1;
+            const [c, r] = geometry.pixelToCell(x - geometry.itemWidth / 2, y - geometry.itemHeight / 3);
+            for (let i = 0; i < count; i++) {
+                const offset = geometry.byColumns ? [0, i] : [i, 0];
+                rects.push(toRect(c + offset[0], r + offset[1]));
+            }
+        }
+        win.setDropPlaceholders(rects);
+    }
+
+    _draggedCells(x, y, geometry) {
         const drag = this._drag;
-        if (!drag || this.settings.get_boolean('keep-arranged'))
-            return;
-        const origin = this._layout.get(drag.primary);
-        if (!origin)
-            return;
-        const geometry = new GridGeometry(win.gridWidth, win.gridHeight, this.settings);
+        const origin = drag ? this._layout.get(drag.primary) : null;
+        if (!drag || !origin)
+            return [];
         const baseX = x - drag.offsetX, baseY = y - drag.offsetY;
         let stray = 0;
+        const cells = [];
         for (const id of drag.ids) {
             const pos = this._layout.get(id);
             if (!pos)
@@ -701,13 +751,25 @@ export class DesktopController {
                 dy = 0;
             }
             const [c, r] = geometry.pixelToCell(baseX + dx, baseY + dy);
-            this._hints.set(id, {m: win.monitor.index, c, r});
+            cells.push([id, c, r]);
         }
+        return cells;
+    }
+
+    _moveDragged(win, x, y) {
+        if (!this._drag || this.settings.get_boolean('keep-arranged'))
+            return;
+        const geometry = new GridGeometry(win.gridWidth, win.gridHeight, this.settings, win.monitor.insets);
+        const cells = this._draggedCells(x, y, geometry);
+        if (!cells.length)
+            return;
+        for (const [id, c, r] of cells)
+            this._hints.set(id, {m: win.monitor.index, c, r});
         this.relayout();
     }
 
     _hintAt(win, x, y, ids) {
-        const geometry = new GridGeometry(win.gridWidth, win.gridHeight, this.settings);
+        const geometry = new GridGeometry(win.gridWidth, win.gridHeight, this.settings, win.monitor.insets);
         const [c, r] = geometry.pixelToCell(x - geometry.itemWidth / 2, y - geometry.itemHeight / 3);
         ids.forEach((id, i) => {
             const offset = geometry.byColumns ? [0, i] : [i, 0];
@@ -728,11 +790,19 @@ export class DesktopController {
             await this._launch(item);
             return;
         }
+        if (item.isExecutable) {
+            this._runExecutable(item);
+            return;
+        }
         if (item.kind === 'file' && !item.isDir) {
             await Gio.AppInfo.launch_default_for_uri_async(item.uri, launchContext(), null);
             return;
         }
         await FileOps.showFolders([item.uri]);
+    }
+
+    _runExecutable(item) {
+        spawn([item.path], GLib.path_get_dirname(item.path));
     }
 
     _openSelection() {

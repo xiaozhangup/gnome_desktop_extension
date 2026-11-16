@@ -11,13 +11,13 @@ const LINE_HEIGHT = 18;
 export function itemSize(settings) {
     const icon = settings.get_int('icon-size');
     const lines = settings.get_int('label-lines');
-    const width = Math.max(icon + 28, Math.round(icon * 1.4), 84);
-    const height = icon + 12 + lines * LINE_HEIGHT + 10;
+    const width = Math.min(Math.max(icon + 34, Math.round(icon * 1.875), 70), icon + 56);
+    const height = icon + 6 + lines * LINE_HEIGHT;
     return {width, height, icon, lines};
 }
 
 export class GridGeometry {
-    constructor(width, height, settings) {
+    constructor(width, height, settings, insets = null) {
         const size = itemSize(settings);
         const spacing = settings.get_int('item-spacing');
         this.itemWidth = size.width;
@@ -27,10 +27,12 @@ export class GridGeometry {
         this.width = width;
         this.height = height;
 
-        const mt = settings.get_int('margin-top');
-        const mb = settings.get_int('margin-bottom');
-        const ml = settings.get_int('margin-left');
-        const mr = settings.get_int('margin-right');
+        const mt = settings.get_int('margin-top') + (insets?.top ?? 0);
+        const mb = settings.get_int('margin-bottom') + (insets?.bottom ?? 0);
+        const ml = settings.get_int('margin-left') + (insets?.left ?? 0);
+        const mr = settings.get_int('margin-right') + (insets?.right ?? 0);
+        this.marginRight = mr;
+        this.marginBottom = mb;
         const availW = Math.max(0, width - ml - mr);
         const availH = Math.max(0, height - mt - mb);
         this.cols = Math.max(1, Math.floor(availW / this.cellWidth));
@@ -58,8 +60,8 @@ export class GridGeometry {
     }
 
     clamp(c, r) {
-        const maxC = Math.max(0, (this.width - this.originX - this.itemWidth) / this.cellWidth);
-        const maxR = Math.max(0, (this.height - this.originY - this.itemHeight) / this.cellHeight);
+        const maxC = Math.max(0, (this.width - this.marginRight - this.originX - this.itemWidth) / this.cellWidth);
+        const maxR = Math.max(0, (this.height - this.marginBottom - this.originY - this.itemHeight) / this.cellHeight);
         return [Math.min(Math.max(0, c), maxC), Math.min(Math.max(0, r), maxR)];
     }
 
@@ -141,8 +143,8 @@ export function computeLayout(grids, items, store, settings, hints) {
         const g = gridOf(m);
         [c, r] = g.geometry.clamp(c, r);
         if (snap) {
-            c = Math.round(c);
-            r = Math.round(r);
+            c = Math.min(g.geometry.cols - 1, Math.round(c));
+            r = Math.min(g.geometry.rows - 1, Math.round(r));
         }
         occupied.get(m).add(key(c, r));
         const [x, y] = g.geometry.cellToPixel(c, r);

@@ -52,6 +52,7 @@ class DesktopWindow extends Gtk.ApplicationWindow {
 
         this._band = new Gtk.Box({css_classes: ['rubberband'], visible: false, can_target: false});
         this.grid.put(this._band, 0, 0);
+        this._dropPlaceholders = [];
 
         this._setupClick();
         this._setupRubberBand();
@@ -153,6 +154,35 @@ class DesktopWindow extends Gtk.ApplicationWindow {
             return true;
         });
         this.grid.add_controller(target);
+    }
+
+    updateMonitor(monitor) {
+        this.monitor = monitor;
+    }
+
+    setDropPlaceholders(rects) {
+        while (this._dropPlaceholders.length < rects.length) {
+            const box = new Gtk.Box({
+                css_classes: ['drop-placeholder'],
+                visible: false,
+                can_target: false,
+            });
+            this.grid.put(box, 0, 0);
+            box.insert_after(this.grid, null);
+            this._dropPlaceholders.push(box);
+        }
+        for (let i = 0; i < this._dropPlaceholders.length; i++) {
+            const box = this._dropPlaceholders[i];
+            if (i < rects.length) {
+                const r = rects[i];
+                box.visible = true;
+                this.grid.move(box, Math.round(r.x), Math.round(r.y));
+                box.set_size_request(Math.round(r.width), Math.round(r.height));
+            } else {
+                box.visible = false;
+                box.set_size_request(0, 0);
+            }
+        }
     }
 
     addItemWidget(widget, x, y) {

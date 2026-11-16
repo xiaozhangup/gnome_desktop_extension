@@ -53,7 +53,8 @@ function loadSettings(extensionDir) {
 // In debug mode there is a single window, as large as the first monitor
 function debugMonitors() {
     const geo = Gdk.Display.get_default().get_monitors().get_item(0).get_geometry();
-    return [{index: 0, primary: true, width: geo.width, height: geo.height}];
+    return [{index: 0, primary: true, width: geo.width, height: geo.height,
+        insets: {top: 0, bottom: 0, left: 0, right: 0}}];
 }
 
 const args = parseArgs(System.programArgs);
@@ -72,6 +73,19 @@ app.connect('startup', () => {
     const monitors = args.monitors ?? debugMonitors();
     controller = new DesktopController(app, settings, monitors, args.debug);
     controller.start();
+
+    const updateMonitorsAction = new Gio.SimpleAction({
+        name: 'update-monitors',
+        parameter_type: new GLib.VariantType('s'),
+    });
+    updateMonitorsAction.connect('activate', (_a, param) => {
+        try {
+            controller?.updateMonitors(JSON.parse(param.unpack()));
+        } catch (e) {
+            console.error(`DeskIcons: update-monitors: ${e.message}`);
+        }
+    });
+    app.add_action(updateMonitorsAction);
 });
 // GApplication requires it, but the windows are already opened in 'startup'
 app.connect('activate', () => {});

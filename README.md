@@ -126,9 +126,8 @@ make install
 This command:
 1. compiles the settings schema (`extension/schemas/gschemas.compiled`) and
    the translations (`extension/locale/`);
-2. creates the **symbolic link**
-   `~/.local/share/gnome-shell/extensions/deskicons@euschi.github.io → extension/`
-   (so every code change is immediately "installed");
+2. copies the extension to
+   `~/.local/share/gnome-shell/extensions/deskicons@euschi.github.io`;
 3. copies the settings launcher to
    `~/.local/share/applications/deskicons-settings.desktop`.
 
@@ -148,7 +147,7 @@ or from the **Extensions** app (`gnome-extensions-app`) by enabling
 
 ### Alternative installation from a zip package
 
-If you prefer a copy independent of the repository (no symlink):
+To install from a zip package:
 
 ```sh
 make zip                                   # creates dist/deskicons@euschi.github.io.shell-extension.zip
@@ -300,7 +299,7 @@ Icon positions are saved in `~/.local/share/deskicons/positions.json`
 ```sh
 cd gnome_desktop_extension
 git pull
-make schemas locale
+make install
 ```
 
 - Changes to the helper only (`extension/app/`): just use **Reload** from the
@@ -415,12 +414,11 @@ journalctl -f -o cat /usr/bin/gnome-shell     # Shell + helper ("DeskIcons" mess
 ```
 
 **Development loop:**
+- run `make install` after changing files to update the installed copy;
 - helper code → *Reload* from the indicator (or
   `gnome-extensions disable … && gnome-extensions enable …`);
 - Shell code → log out/in;
-- GSettings schema changed → `make schemas`;
-- translations changed → `make locale`, then *Reload* (helper) or log
-  out/in (Shell side).
+- translations changed → *Reload* (helper) or log out/in (Shell side).
 
 **Testing in an isolated Shell (no logout):** you can run a headless Shell
 in a private D-Bus session, with configuration and data in a temporary
@@ -484,7 +482,7 @@ Pull requests with new translations are welcome.
 - Check that no other desktop icons extension is enabled.
 
 **`gnome-extensions enable` says the extension does not exist**
-- The folder (or symlink) in `~/.local/share/gnome-shell/extensions/` must be
+- The folder in `~/.local/share/gnome-shell/extensions/` must be
   named exactly like the `uuid` in `metadata.json`. Run `make install` again,
   then log out/in.
 

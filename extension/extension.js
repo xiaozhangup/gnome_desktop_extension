@@ -11,6 +11,7 @@ export default class DeskIconsExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._manager = new DesktopManager(this.path, this._settings);
+        this.DesktopIconsUsableArea = this._manager.usableArea;
         this._manager.enable();
 
         this._settings.connectObject('changed::show-indicator',
@@ -24,6 +25,7 @@ export default class DeskIconsExtension extends Extension {
         this._indicator = null;
         this._manager.destroy();
         this._manager = null;
+        this.DesktopIconsUsableArea = null;
         this._settings = null;
     }
 

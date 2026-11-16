@@ -11,6 +11,10 @@ import Meta from 'gi://Meta';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+import {UsableArea} from './usableArea.js';
+
+const APP_ID = 'it.eugenio.DeskIcons';
+const APP_PATH = '/it/eugenio/DeskIcons';
 const TITLE_RE = /^@deskicons:(\d+)$/;
 const RELOAD_DELAY_MS = 200;
 const RESTART_DELAY_MS = 1000;
@@ -22,9 +26,11 @@ export class DesktopManager {
     constructor(extensionPath, settings) {
         this._extensionPath = extensionPath;
         this._settings = settings;
+        this.usableArea = new UsableArea();
         this._client = null;
         this._subprocess = null;
         this._cancellable = null;
+        this._remoteActions = null;
         this._windows = new Map(); // MetaWindow -> monitor (null until known)
         this._monitors = [];
         this._crashes = [];
@@ -34,9 +40,10 @@ export class DesktopManager {
     enable() {
         Main.layoutManager.connectObject('monitors-changed', () => this.restart(), this);
         global.display.connectObject(
-            'workareas-changed', () => this._placeAll(),
+            'workareas-changed', () => this._updateMonitors(),
             'window-created', (_d, win) => this._onWindowCreated(win),
             this);
+        this.usableArea.connectObject('updated-usable-area', () => this._updateMonitors(), this);
         this._settings.connectObject('changed::monitors', () => this.restart(), this);
         this._launch();
     }
@@ -48,6 +55,8 @@ export class DesktopManager {
         }
         Main.layoutManager.disconnectObject(this);
         global.display.disconnectObject(this);
+        this.usableArea.disconnectObject(this);
+        this.usableArea.destroy();
         this._settings.disconnectObject(this);
         this._kill();
     }
@@ -64,16 +73,27 @@ export class DesktopManager {
         for (const m of lm.monitors) {
             if (onlyPrimary && m.index !== lm.primaryIndex)
                 continue;
-            const wa = lm.getWorkAreaForMonitor(m.index);
+            const geo = this.usableArea.getMonitorGeometry(m.index);
             list.push({
                 index: m.index,
                 primary: m.index === lm.primaryIndex,
-                x: wa.x, y: wa.y, width: wa.width, height: wa.height,
+                x: geo.x, y: geo.y, width: geo.width, height: geo.height,
+                insets: geo.insets,
             });
         }
         // Primary first: that is where new icons go
         list.sort((a, b) => (b.primary - a.primary) || (a.x - b.x) || (a.y - b.y));
         return list;
+    }
+
+    _serializeMonitors() {
+        return JSON.stringify(this._monitors.map(m => ({
+            index: m.index,
+            primary: m.primary,
+            width: m.width,
+            height: m.height,
+            insets: m.insets,
+        })));
     }
 
     _launch() {
@@ -88,9 +108,7 @@ export class DesktopManager {
         const argv = [
             gjs, '-m', `${dir}/app/main.js`,
             '--extension-dir', dir,
-            '--monitors', JSON.stringify(this._monitors.map(m => ({
-                index: m.index, primary: m.primary, width: m.width, height: m.height,
-            }))),
+            '--monitors', this._serializeMonitors(),
         ];
 
         try {
@@ -101,6 +119,8 @@ export class DesktopManager {
             logError(e, 'DeskIcons: cannot start the helper');
             return;
         }
+
+        this._remoteActions = Gio.DBusActionGroup.get(Gio.DBus.session, APP_ID, APP_PATH);
 
         this._subprocess = this._client.get_subprocess();
         this._cancellable = new Gio.Cancellable();
@@ -155,6 +175,7 @@ export class DesktopManager {
         this._subprocess?.send_signal(SIGTERM);
         this._subprocess = null;
         this._client = null;
+        this._remoteActions = null;
         this._forgetWindows();
     }
 
@@ -199,8 +220,8 @@ export class DesktopManager {
         this._place(win);
     }
 
-    _placeAll() {
-        // The work area may change (panels, docks): update geometries
+    _updateMonitors() {
+        // The work area or dock margins may change: update geometries and notify helper
         const fresh = this._computeMonitors();
         for (const m of this._monitors) {
             const f = fresh.find(n => n.index === m.index);
@@ -209,6 +230,8 @@ export class DesktopManager {
         }
         for (const win of this._windows.keys())
             this._place(win);
+        this._remoteActions?.activate_action('update-monitors',
+            new GLib.Variant('s', this._serializeMonitors()));
     }
 
     _place(win) {
