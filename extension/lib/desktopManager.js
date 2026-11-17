@@ -15,7 +15,7 @@ import {UsableArea} from './usableArea.js';
 
 const APP_ID = 'it.eugenio.DeskIcons';
 const APP_PATH = '/it/eugenio/DeskIcons';
-const TITLE_RE = /^@deskicons:(\d+)$/;
+const TITLE_RE = /^@deskicons:(.+)$/;
 const RELOAD_DELAY_MS = 200;
 const RESTART_DELAY_MS = 1000;
 const MAX_CRASHES = 5;
@@ -66,16 +66,40 @@ export class DesktopManager {
         this._scheduleLaunch(RELOAD_DELAY_MS);
     }
 
+    _monitorId(monitorIndex, seen) {
+        const mm = global.backend.get_monitor_manager();
+        const logical = mm.get_logical_monitors().find(l => l.get_number() === monitorIndex);
+        const phys = logical?.get_monitors()[0] ?? null;
+        const connector = phys?.get_connector() ?? null;
+        const serial = phys?.get_serial() ?? null;
+        let id;
+        if (serial) {
+            const vendor = phys.get_vendor() ?? '';
+            const product = phys.get_product() ?? '';
+            id = `${vendor}:${product}:${serial}`;
+            if (seen.has(id) && connector)
+                id = `${id}:${connector}`;
+        } else {
+            id = connector ?? `monitor-${monitorIndex}`;
+        }
+        if (seen.has(id))
+            id = `${id}#${monitorIndex}`;
+        seen.add(id);
+        return id;
+    }
+
     _computeMonitors() {
         const lm = Main.layoutManager;
         const onlyPrimary = this._settings.get_string('monitors') === 'primary';
+        const seen = new Set();
         const list = [];
         for (const m of lm.monitors) {
+            const id = this._monitorId(m.index, seen);
             if (onlyPrimary && m.index !== lm.primaryIndex)
                 continue;
             const geo = this.usableArea.getMonitorGeometry(m.index);
             list.push({
-                index: m.index,
+                id,
                 primary: m.index === lm.primaryIndex,
                 x: geo.x, y: geo.y, width: geo.width, height: geo.height,
                 insets: geo.insets,
@@ -88,7 +112,7 @@ export class DesktopManager {
 
     _serializeMonitors() {
         return JSON.stringify(this._monitors.map(m => ({
-            index: m.index,
+            id: m.id,
             primary: m.primary,
             width: m.width,
             height: m.height,
@@ -179,10 +203,16 @@ export class DesktopManager {
         this._forgetWindows();
     }
 
+    _forgetWindow(win) {
+        win.disconnectObject(this);
+        if (Object.hasOwn(win, 'is_override_redirect'))
+            delete win.is_override_redirect;
+        this._windows.delete(win);
+    }
+
     _forgetWindows() {
-        for (const win of this._windows.keys())
-            win.disconnectObject(this);
-        this._windows.clear();
+        for (const win of [...this._windows.keys()])
+            this._forgetWindow(win);
     }
 
     _onWindowCreated(win) {
@@ -194,10 +224,7 @@ export class DesktopManager {
             'notify::title', () => this._setup(win),
             'position-changed', () => this._place(win),
             'size-changed', () => this._place(win),
-            'unmanaged', () => {
-                win.disconnectObject(this);
-                this._windows.delete(win);
-            },
+            'unmanaged', () => this._forgetWindow(win),
             this);
         this._setup(win);
     }
@@ -206,8 +233,8 @@ export class DesktopManager {
         const match = TITLE_RE.exec(win.get_title() ?? '');
         if (!match)
             return;
-        const index = parseInt(match[1], 10);
-        const monitor = this._monitors.find(m => m.index === index) ?? null;
+        const id = match[1];
+        const monitor = this._monitors.find(m => m.id === id) ?? null;
         this._windows.set(win, monitor);
         if (!monitor)
             return;
@@ -217,6 +244,13 @@ export class DesktopManager {
         if (!win.is_on_all_workspaces())
             win.stick();
         win.hide_from_window_list();
+        // Exclude from GNOME Shell's screenshot window selector (which ignores DESKTOP/skip-taskbar)
+        if (!Object.hasOwn(win, 'is_override_redirect')) {
+            Object.defineProperty(win, 'is_override_redirect', {
+                value: () => true,
+                configurable: true,
+            });
+        }
         this._place(win);
     }
 
@@ -224,7 +258,7 @@ export class DesktopManager {
         // The work area or dock margins may change: update geometries and notify helper
         const fresh = this._computeMonitors();
         for (const m of this._monitors) {
-            const f = fresh.find(n => n.index === m.index);
+            const f = fresh.find(n => n.id === m.id);
             if (f)
                 Object.assign(m, f);
         }

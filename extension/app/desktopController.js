@@ -224,7 +224,7 @@ export class DesktopController {
 
     _grids() {
         return this.windows.map(win => ({
-            monitor: win.monitor.index,
+            monitor: win.monitor.id,
             geometry: new GridGeometry(win.gridWidth, win.gridHeight, this.settings, win.monitor.insets),
         }));
     }
@@ -232,12 +232,12 @@ export class DesktopController {
     updateMonitors(monitors) {
         this._monitors = monitors;
         for (const m of monitors)
-            this._windowFor(m.index)?.updateMonitor(m);
+            this._windowFor(m.id)?.updateMonitor(m);
         this.relayout();
     }
 
-    _windowFor(monitorIndex) {
-        return this.windows.find(w => w.monitor.index === monitorIndex) ?? null;
+    _windowFor(monitorId) {
+        return this.windows.find(w => w.monitor.id === monitorId) ?? null;
     }
 
     relayout() {
@@ -395,7 +395,7 @@ export class DesktopController {
 
     onRubberBandUpdate(win, rect) {
         const sel = new Set(this._bandBase);
-        for (const id of this._idsInRect(win.monitor.index, rect)) {
+        for (const id of this._idsInRect(win.monitor.id, rect)) {
             if (this._bandToggle && this._bandBase.has(id))
                 sel.delete(id);
             else
@@ -764,7 +764,7 @@ export class DesktopController {
         if (!cells.length)
             return;
         for (const [id, c, r] of cells)
-            this._hints.set(id, {m: win.monitor.index, c, r});
+            this._hints.set(id, {m: win.monitor.id, c, r});
         this.relayout();
     }
 
@@ -773,7 +773,7 @@ export class DesktopController {
         const [c, r] = geometry.pixelToCell(x - geometry.itemWidth / 2, y - geometry.itemHeight / 3);
         ids.forEach((id, i) => {
             const offset = geometry.byColumns ? [0, i] : [i, 0];
-            this._hints.set(id, {m: win.monitor.index, c: c + offset[0], r: r + offset[1]});
+            this._hints.set(id, {m: win.monitor.id, c: c + offset[0], r: r + offset[1]});
         });
     }
 

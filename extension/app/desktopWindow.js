@@ -37,7 +37,7 @@ class DesktopWindow extends Gtk.ApplicationWindow {
     _init(app, controller, monitor, debug) {
         super._init({
             application: app,
-            title: `@deskicons:${monitor.index}`,
+            title: `@deskicons:${monitor.id}`,
             decorated: debug,
             default_width: debug ? Math.round(monitor.width * 0.6) : monitor.width,
             default_height: debug ? Math.round(monitor.height * 0.6) : monitor.height,

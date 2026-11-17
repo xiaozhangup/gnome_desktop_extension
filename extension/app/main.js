@@ -52,8 +52,9 @@ function loadSettings(extensionDir) {
 
 // In debug mode there is a single window, as large as the first monitor
 function debugMonitors() {
-    const geo = Gdk.Display.get_default().get_monitors().get_item(0).get_geometry();
-    return [{index: 0, primary: true, width: geo.width, height: geo.height,
+    const mon = Gdk.Display.get_default().get_monitors().get_item(0);
+    const geo = mon.get_geometry();
+    return [{id: mon.get_connector() || 'debug-0', primary: true, width: geo.width, height: geo.height,
         insets: {top: 0, bottom: 0, left: 0, right: 0}}];
 }
 

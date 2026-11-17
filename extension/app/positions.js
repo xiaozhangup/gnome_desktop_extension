@@ -22,7 +22,12 @@ export class PositionStore {
     _load() {
         try {
             const [, bytes] = this._file.load_contents(null);
-            this._data = JSON.parse(new TextDecoder().decode(bytes)) ?? {};
+            const raw = JSON.parse(new TextDecoder().decode(bytes)) ?? {};
+            this._data = {};
+            for (const [id, pos] of Object.entries(raw)) {
+                if (typeof pos?.m === 'string')
+                    this._data[id] = pos;
+            }
         } catch {
             this._data = {};
         }
